@@ -38,4 +38,15 @@ public class ShiroUtils {
         Collection<Session> sessions = sessionDAO.getActiveSessions();
         return principals;
     }
+        /**
+     * 切换身份，登录后，动态更改subject的用户属性
+     * @param userInfo
+     */
+    public static void setUser(UserDO userInfo) {
+    	Subject subject = SecurityUtils.getSubject();
+    	PrincipalCollection principalCollection = subject.getPrincipals(); 
+    	String realmName = principalCollection.getRealmNames().iterator().next();
+    	PrincipalCollection newPrincipalCollection = new SimplePrincipalCollection(userInfo, realmName);
+    	subject.runAs(newPrincipalCollection);
+    }
 }
